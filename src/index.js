@@ -59,10 +59,22 @@ const typeDefs = gql`
     title: String
     author: String
   }
+  type Training {
+    id: ID!
+    title: String
+    objectives: String
+    curriculum: String
+  }
+  type Discount {
+    id: ID!
+    code: String
+    discountPercentage: Int
+  }
   # The "Query" type is the root of all GraphQL queries.
   # (A "Mutation" type will be covered later on.)
   type Query {
-    books: [Book]
+    trainings: [Training]
+    discounts: [Discount]
   }
 `;
 
@@ -70,7 +82,8 @@ const typeDefs = gql`
 // schema.  We'll retrieve books from the "books" array above.
 const resolvers = {
   Query: {
-    books: () => books
+    trainings: () => fetchTrainings(),
+    discounts: () => fetchDiscounts()
   }
 };
 
@@ -87,7 +100,7 @@ server.listen().then(({ url }) => {
 
 function fetchTrainings() {
   // More info about the fetch function? https://github.com/bitinn/node-fetch#json
-  return fetch("https://restapi.reactgraphql.academy/v1/trainings/")
+  return fetch("https://api.reactgraphql.academy/rest/trainings/")
     .then(res => res.json())
     .catch(error => console.log(error));
 }
@@ -99,7 +112,7 @@ function fetchTrainingById(id) {
 }
 
 function fetchDiscounts() {
-  return fetch("https://restapi.reactgraphql.academy/v1/discounts/")
+  return fetch("https://api.reactgraphql.academy/rest/discounts/")
     .then(res => res.json())
     .catch(error => console.log(error));
 }
